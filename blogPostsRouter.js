@@ -45,6 +45,7 @@ router.post("/", (req, res) => {
       return res.status(400).send(message);
     }
   }
+  //???? there are 3 kets in this const, but below in requiredField are 5?
   const item = BlogPosts.create(
     req.body.title,
     req.body.content,
