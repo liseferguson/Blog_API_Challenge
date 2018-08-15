@@ -10,7 +10,6 @@ const app = express();
 app.use(morgan("common"));
 //tell app to use json in express??
 app.use(express.json());
-
 // you need to import `blogPostsRouter` router and route
 // requests to HTTP requests to `/blog-posts` to `blogPostsRouter`
 app.use("/blog-posts", blogPostsRouter);
