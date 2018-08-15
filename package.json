@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mocha": "^5.2.0",
     "uuid": "^3.3.2"
   }
 }
