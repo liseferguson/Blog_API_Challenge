@@ -2,14 +2,31 @@
   "name": "blog_api_challenge",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "mocha --exit"
+    "start": "node server.js",
+    "test": "mocha"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "mocha": "^5.2.0",
     "uuid": "^3.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liseferguson/Blog_API_Challenge"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liseferguson/Blog_API_Challenge"
+  },
+  "author": "",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0"
   }
 }

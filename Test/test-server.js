@@ -1,13 +1,15 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const {app, runServer, closeServer} = require('../server');
-
+//the solution doesn't have this, but uses expect instead of should
 const should = chai.should();
+
+const { app, runServer, closeServer } = require('../server');
+
 
 chai.use(chaiHttp);
 
-describe('BlogPosts', function() {
+describe('Blog Posts', function() {
 
   before(function() {
     return runServer();
@@ -21,34 +23,37 @@ describe('BlogPosts', function() {
     // since we're returning `chai.request.get.then...`
     // we don't need a `done` call back
     return chai.request(app)
-      .get('/blogPostsRouter')
+      .get('/blog-posts')
       .then(function(res) {
-
         res.should.have.status(200);
         res.should.be.json;
         res.body.should.be.a('array');
-
         res.body.should.have.length.of.at.least(1);
-
         res.body.forEach(function(item) {
           item.should.be.a('object');
-          item.should.include.keys('title', 'content', 'author');
+          item.should.have.all.keys('id','title', 'content', 'author', 'publishDate');
         });
       });
   	});
+
 	it('should add a blog entry on POST', function() {
-    const newBlogPost = {
-        title: 'title', content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam', author: 'authorName'
+    	const newBlogPost = {
+        	title: 'title', 
+        	content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam', 
+        	author: 'authorName'
 	};
+
     return chai.request(app)
-      .post('/blogPostsRouter')
+      .post('/blog-posts')
       .send(newBlogPost)
       .then(function(res) {
         res.should.have.status(201);
         res.should.be.json;
         res.body.should.be.a('object');
-        res.body.should.include.keys('title', 'content', 'author');
-        res.body.name.should.equal(newBlogPost.name);
+        res.body.should.have.all.keys('id', 'title', 'content', 'author', 'publishDate');
+        res.body.title.should.equal(newBlogPost.title);
+        res.body.author.should.equal(newBlogPost.author);
+        res.body.content.should.equal(newBlogPost.content);
         res.body.content.should.be.a('string');
       });
  	 });
@@ -60,7 +65,7 @@ describe('BlogPosts', function() {
       content: 'updated content here',
       author: 'updated author here'
     };
-//???? this whole id biz is confusing. We use id in the BlogPostRouter file, as well as publishDate, do we need them as blog post bodt keys here as well?
+
     return chai.request(app)
       // first have to get recipes so have `id` for one we
       // want to update. Note that once we're working with databases later
@@ -72,7 +77,7 @@ describe('BlogPosts', function() {
         updatePost.id = res.body[0].id;
 
         return chai.request(app)
-          .put(`/BlogPosts/${updatePost.id}`)
+          .put(`/blog-posts/${updatePost.id}`)
           .send(updatePost)
       })
       .then(function(res) {
@@ -87,10 +92,10 @@ describe('BlogPosts', function() {
       // in this course, we'll be able get the `id` of an existing instance
       // directly from the database, which will allow us to isolate the DELETE
       // logic under test from our GET interface
-      .get('/BlogPosts')
+      .get('/blog-posts')
       .then(function(res) {
         return chai.request(app)
-          .delete(`/BlogPosts/${res.body[0].id}`)
+          .delete(`/blog-posts/${res.body[0].id}`)
       })
       .then(function(res) {
         res.should.have.status(204);
