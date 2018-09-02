@@ -72,7 +72,7 @@ describe('Blog Posts', function() {
       // in this course get the `id` of an existing instance from the database,
       // which will allow us to isolate the PUT logic under test from our
       // GET interface.
-      .get('/BlogPosts')
+      .get('/blog-posts')
       .then(function(res) {
         updatePost.id = res.body[0].id;
 
@@ -82,6 +82,7 @@ describe('Blog Posts', function() {
       })
       .then(function(res) {
         res.should.have.status(204);
+        //why 204? 204 is no content...
       });
   });
 

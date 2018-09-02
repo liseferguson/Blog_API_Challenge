@@ -17,15 +17,31 @@ function lorem() {
 }
 
 // seed some posts so initial GET requests will return something
-BlogPosts.create("10 things -- you won't believe #4", lorem(), "Billy Bob");
-BlogPosts.create("Lions and tigers and bears oh my", lorem(), "Lefty Lil");
+//BlogPosts.create("10 things -- you won't believe #4", lorem(), "Billy Bob");
+//BlogPosts.create("Lions and tigers and bears oh my", lorem(), "Lefty Lil");
 
 // add endpoint for GET. It should call `BlogPosts.get()`
 // and return JSON objects of stored blog posts.
 // send back JSON representation of all blog posts
 // on GET requests to root
 router.get("/", (req, res) => {
-  res.json(BlogPosts.get());
+  BlogPosts.find()
+    .then(blogposts => {
+      res.json({
+        blogposts: blogposts.map(blogposts => blogposts.serialize())
+      });
+    })
+    .catch(err => {
+      //specific error for developer in console
+      console.log(err);
+      //error in browser for user
+      res.status(500).json({ message: "Something bad happened" });
+    });
+
+
+
+
+  //res.json(BlogPosts.get());
 });
 
 // add endpoint for POST requests, which should cause a new
@@ -34,7 +50,7 @@ router.get("/", (req, res) => {
 // the id, which `BlogPosts` will create. This endpoint should
 // send a 400 error if the post doesn't contain
 // `title`, `content`, and `author`
-router.post("/", (req, res) => {
+/*router.post("/", (req, res) => {
   // ensure `name` and `budget` are in request body
   const requiredFields = ["title", "content", "author"];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -96,5 +112,5 @@ router.delete("/:id", (req, res) => {
   console.log(`Deleted blog post with id \`${req.params.ID}\``);
   res.status(204).end();
 });
-
+*/
 module.exports = router;
